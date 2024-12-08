@@ -1,0 +1,8 @@
+flask
+matplotlib
+pandas
+statsmodels
+joblib
+numpy
+scikit-learn
+pmdarima

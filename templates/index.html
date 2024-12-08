@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARIMA Forecasting</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div style="text-align: center; margin-top: 50px;">
+        <h1>ARIMA Forecasting</h1>
+        <p>Upload a CSV file containing the WQI values to forecast the next values.</p>
+
+        <!-- Form to upload CSV file -->
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" name="file" id="fileInput" accept=".csv" required>
+            <br><br>
+            <button type="submit">Upload and Get Forecast</button>
+        </form>
+
+        <h2>Forecasted Values:</h2>
+        <pre id="forecast_result"></pre>
+    </div>
+
+    <script>
+        // Handle form submission
+        $('#uploadForm').on('submit', function(e) {
+            e.preventDefault();
+
+            // Create a FormData object to send the file
+            var formData = new FormData();
+            formData.append('file', $('#fileInput')[0].files[0]);
+
+            // Send the file to Flask backend
+            $.ajax({
+                url: 'http://127.0.0.1:5000/forecast',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    if (response.forecast) {
+                        // Display forecasted values
+                        $('#forecast_result').text(JSON.stringify(response.forecast, null, 2));
+                    } else if (response.error) {
+                        $('#forecast_result').text("Error: " + response.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $('#forecast_result').text("Error: " + error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

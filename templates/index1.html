@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WQI Forecast</title>
+</head>
+<body>
+    <h1>Water Quality Index (WQI) Forecast</h1>
+
+    <form action="/forecast" method="post" enctype="multipart/form-data">
+        <label for="file">Upload CSV file with WQI data:</label>
+        <input type="file" name="file" accept=".csv" required><br><br>
+        <input type="submit" value="Upload and Forecast">
+    </form>
+
+    {% if forecast %}
+        <h3>Forecasted WQI for the next 20 days:</h3>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Forecast WQI</th>
+            </tr>
+            {% for record in forecast %}
+                <tr>
+                    <td>{{ record['Date'] }}</td>
+                    <td>{{ record['Forecast_WQI'] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <h3>Forecast Plot:</h3>
+        <img src="{{ plot_path }}" alt="Forecast Plot">
+    {% endif %}
+</body>
+</html>
